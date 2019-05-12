@@ -1,0 +1,165 @@
+<div>
+    <nav class="navbar navbar-dark bg-dark">
+        <!-- Navbar content -->
+        <a class="navbar-brand" href="#">Adults Data</a>
+  
+      </nav>
+<br>
+<br>
+<div class="row">
+  <div class="col-1"></div>
+<div class="col-5">
+<div  class="card p-4 m-4 h-100">
+  <canvas baseChart
+          [data]="pieChartData"
+          [labels]="pieChartLabels"
+          [colors]="pieChartColors"
+          [chartType]="pieChartType">
+  </canvas>
+  <br>
+  <ul>
+    <li *ngFor="let Data of pieChartData;let i=index">{{pieChartLabels[i]}}:{{Data}}</li>
+  </ul>
+  <b class="text-center mt-auto">Fig 1.0 :Distribution of number of males and females</b>
+</div>
+
+</div>
+<div class="col-5 mr-2">
+  <div class="card p-4 m-4 h-100" >
+    <canvas id="canvas">Your browser does not support the canvas element.</canvas>
+    <br>
+    
+  <ul>
+    <li *ngFor="let label of barChartLabels;let i=index">{{label}}:{{barChartData[0].data[i]}}</li>
+  </ul>
+  <b class="text-center mt-auto">Fig 1.1 :Number of people in each relationship status</b>
+  </div>
+  
+</div>
+</div>
+<br>
+
+<!-- <div>
+  <div>
+    <div style="display: block">
+      <canvas baseChart
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [chartType]="barChartType">
+      </canvas>
+    </div>
+  </div>
+</div> -->
+
+<br>
+
+<h2 class="mt-4">Data table for the given dataset.</h2>
+
+<div class="card p-4">
+
+<h3>Filters</h3>
+<br>
+<div class="row p-4">
+  <div class="col-3">
+      <h5>Sex</h5>
+      <br>
+      <mat-radio-group
+  aria-labelledby="example-radio-group-label"
+  class="example-radio-group"
+  [(ngModel)]="gender">
+  <mat-radio-button class="example-radio-button"  value="Male">
+    {{'Male'}}
+  </mat-radio-button>
+  <br>
+  <mat-radio-button class="example-radio-button"  value="Female">
+      {{'Female'}}
+    </mat-radio-button>
+    <br>
+    <mat-radio-button class="example-radio-button"  value="both">
+        {{'Both'}}
+      </mat-radio-button>
+</mat-radio-group>
+      <br>
+      
+  </div>
+  <div class="col-3">
+    <h5>Race</h5>
+    <br>
+    <mat-radio-group
+  aria-labelledby="example-radio-group-label"
+  class="example-radio-group"
+  [(ngModel)]="race_option">
+  <div *ngFor="let race of races">
+  <mat-radio-button class="example-radio-button"  [value]="race">
+    {{race}}
+  </mat-radio-button>
+</div>
+</mat-radio-group>
+    </div>
+    <div class="col-3">
+    <h5>Relationship Status</h5>
+    <br>
+    <mat-radio-group
+    aria-labelledby="example-radio-group-label"
+    class="example-radio-group"
+    [(ngModel)]="relation_option">
+    <div *ngFor="let relation of barChartLabels">
+    <mat-radio-button class="example-radio-button"  [value]="relation">
+      {{relation}}
+    </mat-radio-button>
+  </div>
+  </mat-radio-group>
+      </div>
+      <div class="col-3">
+          <button type="button" (click)="filterSearch()" class="btn btn-info">Apply</button>
+          <button type="button" (click)="reset()" class="btn btn-light ml-2">Reset</button>
+            </div>
+</div>
+</div>
+<br>
+
+
+<div class="columns">
+  <div class="column col-12">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <span class="col-3 col-sm-12 col-ml-auto d-inline">
+            <div class="input-group ml-auto">
+                 <input class="form-input form-control  "
+                type="text"
+                 style="max-width:300px"
+                id="globalSearch"
+                
+                (input)="onChange($event.target.value)"
+                placeholder="Search">
+                <span class="input-group-btn">
+                    <button (click)="getData({})" type="button" class="btn btn-secondary ml-auto">Search</button>
+                </span>
+             </div>
+          
+        </span>
+      </div>
+    </form>
+  </div>
+
+
+<ngx-table
+            #table
+           [configuration]="configuration"
+           [data]="data"
+           [pagination]="pagination"
+           (event)="eventEmitted($event)"
+           [columns]="columns">
+</ngx-table>
+
+</div>
+<br>
+
+<div class="footer border dark">
+<div class="row">
+  <div class="col-3">
+    {{today | date:'medium'}}
+  </div>
+</div>
+</div>
