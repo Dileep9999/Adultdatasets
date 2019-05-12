@@ -1,0 +1,25 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Adults Data</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> {% endcomment %}
+  {% comment %} <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> {% endcomment %}
+{% comment %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endcomment %}
+<link rel="stylesheet" href="{% static 'js/styles.css' %}"></head>
+<body>
+	<app-root>
+    <!-- Angualar loads here.-->
+    {% comment %} <img src="/static/ang/assets/images/loading/load.gif" alt="Loading..." style="position:fixed; top:50%; left:50%; transform: translate(-50%, -50%);"> {% endcomment %}
+    </app-root>
+	<script type="text/javascript" src="{% static 'js/runtime.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/polyfills.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

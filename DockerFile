@@ -1,0 +1,62 @@
+MAINTAINER Dileep_Bandla bdileep9999@gmail.com
+
+
+RUN apt-get update
+RUN apt-get install libsqlite3-dev make redis-server nginx sqlite3 supervisor python curl
+
+RUN apt-get update
+
+RUN apt-get install -y -q postgresql-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
+
+RUN /etc/init.d/postgresql start \
+    && psql --command "CREATE USER pguser WITH SUPERUSER PASSWORD 'postgres';" \
+    && psql --command "CREATE USER robot  WITH SUPERUSER PASSWORD 'robot';" \
+    && createdb -O postgres -E UTF8 -T template0 --locale=en_US.utf8 activate_v1 \
+    && psql --command "GRANT ALL PRIVILEGES ON DATABASE activate_v1 to robot;"
+
+RUN echo "local all all trust"   > /etc/postgresql/9.5/main/pg_hba.conf
+#RUN echo "listen_address = '' " >> /etc/postgresql/9.5/main/postgresql.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
+RUN echo "client_encoding = utf8" >> /etc/postgresql/9.5/main/postgresql.conf
+RUN mkdir -p /var/run/postgresql && chown -R postgres /var/run/postgresql
+VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+# allow autostart again
+USER root
+RUN	rm /usr/sbin/policy-rc.d
+
+
+RUN /usr/bin/redis-server /etc/redis/redis.conf
+
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION 10.15.3
+
+RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash
+
+# install node and npm
+RUN . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
+# confirm installation
+RUN node -v
+RUN npm -v
+
+EXPOSE 22
+EXPOSE 5000
+EXPOSE 8000
+EXPOSE 2222 80
+
+RUN pip3 install -Iv pipenv==11.6.3
+ADD ./Pipfile                       /root/app/Pipfile
+ADD ./Pipfile.lock                  /root/app/Pipfile.lock
+RUN cd /root/app && pipenv install
+
+ADD ./App           /root/app/App
+ADD ./static        /root/app/static
+ADD ./templates     /root/app/templates
+ADD ./manage.py     /root/app/manage.py
+ADD ./Makefile                      /root/app/Makefile
