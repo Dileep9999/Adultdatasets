@@ -36,8 +36,8 @@ class graphs(generics.ListAPIView):
             data = cache.get('graph_data')
             return  Response(data)
         else:
-            male_count = AdultData.objects.filter(sex__icontains="Male").count()
-            female_count = AdultData.objects.filter(sex__icontains="Female").count()
+            male_count = AdultData.objects.filter(sex="Male").count()
+            female_count = AdultData.objects.filter(sex="Female").count()
             dat=[x['relationship'] for x in AdultData.objects.values('relationship').distinct() ]
             race=[y['race'] for y in AdultData.objects.values('race').distinct()]
             relationship_counts=[]
